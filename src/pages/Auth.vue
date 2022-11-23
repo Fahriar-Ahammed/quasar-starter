@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="q-gutter-y-md" style="max-width: 900px; width: 100%">
+    <div class="q-gutter-y-md" style="max-width: 600px; width: 100%">
 
       <q-card>
         <q-tabs
@@ -56,8 +56,62 @@
           </q-tab-panel>
 
           <q-tab-panel name="signUp">
-            <div class="text-h6">Sign Up</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <q-form
+              @submit="onSubmit"
+              @reset="onReset"
+              class="q-gutter-md"
+            >
+              <q-input
+                filled
+                v-model="name"
+                label="Name *"
+                hint="enter you full name"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Please enter your Full Name']"
+              />
+
+              <q-input
+                filled
+                v-model="email"
+                label="Email *"
+                hint="enter you email"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Please enter your email']"
+              />
+
+              <q-input
+                filled
+                type="password"
+                v-model="password"
+                label="password *"
+                lazy-rules
+                :rules="[
+          val => val !== null && val !== '' || 'Please Enter your password'
+        ]"
+              />
+
+              <q-input
+                filled
+                type="password"
+                v-model="password_confirmation"
+                label="Confirm password *"
+                lazy-rules
+                :rules="[
+          val => val !== null && val !== password_confirmation || 'Please Confirm your password'
+        ]"
+              />
+
+              <!--
+                            <q-toggle v-model="accept" label="I accept the license and terms" />
+              -->
+
+              <div>
+                <q-btn label="Register" type="submit" color="primary"/>
+                <!--
+                                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+                -->
+              </div>
+            </q-form>
           </q-tab-panel>
 
         </q-tab-panels>
@@ -78,12 +132,16 @@ export default {
     const $q = useQuasar()
 
     const name = ref(null)
+    const email = ref(null)
     const password = ref(null)
+    const password_confirmation = ref(null)
     const accept = ref(false)
     return {
       tab: ref('signIn'),
       name,
+      email,
       password,
+      password_confirmation,
       accept,
 
       onSubmit () {

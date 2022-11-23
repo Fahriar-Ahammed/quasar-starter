@@ -5,7 +5,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'admin-login', component: () => import('pages/admin/login.vue') },
       { path: 'login', component: () => import('pages/Auth.vue') },
+      { path: 'page1', component: () => import('pages/Page1.vue') },
+      { path: 'page2', component: () => import('pages/Page2.vue') },
     ]
   },
   {

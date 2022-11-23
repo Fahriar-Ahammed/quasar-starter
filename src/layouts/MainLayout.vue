@@ -15,8 +15,13 @@
         <q-toolbar-title>
           Quasar Starter
         </q-toolbar-title>
-
+        <div v-if="$q.platform.is.desktop">
+          <q-btn flat color="white" label="Home" to="/" />
+          <q-btn flat color="white" label="Page1" to="page1" />
+          <q-btn flat color="white" label="Page2" to="page2" />
+        </div>
         <q-btn  class="glossy" rounded color="teal" label="Sign In"  to="login"/>
+
       </q-toolbar>
     </q-header>
 
@@ -30,14 +35,23 @@
         <q-item-label
           header
         >
-          Essential Links
+          Admin Section
         </q-item-label>
+        <template v-for="route in essentialLinks">
+          <q-item
+            clickable
+            v-ripple
+            :active="route.link === this.path.substring(1)"
+            active-class="my-menu-link"
+            :to="route.link"
+          >
+            <q-item-section avatar>
+              <q-icon :name="route.icon" />
+            </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+            <q-item-section>{{route.title}}</q-item-section>
+          </q-item>
+        </template>
       </q-list>
     </q-drawer>
 
@@ -48,52 +62,26 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import {computed, defineComponent, ref} from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import {useRoute} from 'vue-router'
 
 const linksList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Home',
+    icon: 'home',
+    link: '/'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
+    title: 'Page1',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    link: 'page1'
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'Page2',
+    icon: 'code',
+    link: 'page2'
   },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
 ]
 
 export default defineComponent({
@@ -105,10 +93,12 @@ export default defineComponent({
 
   setup () {
     const leftDrawerOpen = ref(false)
-
+    const route=useRoute();
+    const path = computed(() =>route.path)
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
+      path,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
