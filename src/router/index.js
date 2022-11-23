@@ -26,5 +26,33 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+ /* Router.beforeEach((to,from,next)=>{
+    let roles = localStorage.getItem("roles");
+  if(roles != null){
+    roles = roles.split(',')
+  }
+  if(to.matched.some(record => record.meta.requiresAdmin)) {
+    if(roles != null && roles.indexOf('admin') >= 0 ){
+      next()
+    }else{
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath }
+      })
+    }
+  }else if(to.matched.some(record => record.meta.requiresUser)) {
+    if(roles != null && roles.indexOf('user') >= 0 ){
+      next()
+    }else{
+      next({
+        path: '/login',
+        params: { nextUrl: to.fullPath }
+      })
+    }
+  }else{
+    next()
+  }
+  })*/
+
   return Router
 })

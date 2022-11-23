@@ -66,6 +66,7 @@ import {computed, defineComponent, ref} from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import {useRoute} from 'vue-router'
 
+
 const linksList = [
   {
     title: 'Home',
