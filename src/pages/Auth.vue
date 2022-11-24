@@ -17,23 +17,21 @@
         <q-tab-panels v-model="tab" animated class="bg-white">
           <q-tab-panel name="signIn">
             <q-form
-              @submit="onSubmit"
-              @reset="onReset"
               class="q-gutter-md"
             >
               <q-input
                 filled
-                v-model="name"
+                v-model="authData.email"
                 label="Email *"
                 hint="enter you email"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Please enter your email']"
-              />
+                />
 
               <q-input
                 filled
                 type="password"
-                v-model="password"
+                v-model="authData.password"
                 label="password *"
                 lazy-rules
                 :rules="[
@@ -46,7 +44,7 @@
 -->
 
               <div>
-                <q-btn label="Login" type="submit" color="primary"/>
+                <q-btn v-on:click="login" label="Login"  color="primary"/>
 <!--
                 <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
 -->
@@ -57,13 +55,11 @@
 
           <q-tab-panel name="signUp">
             <q-form
-              @submit="onSubmit"
-              @reset="onReset"
               class="q-gutter-md"
             >
               <q-input
                 filled
-                v-model="name"
+                v-model="authData.name"
                 label="Name *"
                 hint="enter you full name"
                 lazy-rules
@@ -72,7 +68,7 @@
 
               <q-input
                 filled
-                v-model="email"
+                v-model="authData.email"
                 label="Email *"
                 hint="enter you email"
                 lazy-rules
@@ -82,7 +78,7 @@
               <q-input
                 filled
                 type="password"
-                v-model="password"
+                v-model="authData.password"
                 label="password *"
                 lazy-rules
                 :rules="[
@@ -93,11 +89,11 @@
               <q-input
                 filled
                 type="password"
-                v-model="password_confirmation"
+                v-model="authData.password_confirmation"
                 label="Confirm password *"
                 lazy-rules
                 :rules="[
-          val => val !== null && val !== password_confirmation || 'Please Confirm your password'
+          val => val !== null && val !== authData.password || 'Please Confirm your password'
         ]"
               />
 
@@ -122,56 +118,30 @@
   </q-page>
 </template>
 
-<script>
-import {ref} from "vue";
-import {useQuasar} from "quasar";
+<script setup>
+import {reactive, ref} from "vue";
+import { api } from 'boot/axios'
 
-export default {
-  name: "Auth",
-  setup () {
-    const $q = useQuasar()
+const tab = ref('signIn')
+const authData = reactive({
+  name:'',
+  email:'',
+  password:'',
+  password_confirmation:'',
+})
 
-    const name = ref(null)
-    const email = ref(null)
-    const password = ref(null)
-    const password_confirmation = ref(null)
-    const accept = ref(false)
-    return {
-      tab: ref('signIn'),
-      name,
-      email,
-      password,
-      password_confirmation,
-      accept,
-
-      onSubmit () {
-        if (accept.value !== true) {
-          $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'You need to accept the license and terms first'
-          })
-        }
-        else {
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Submitted'
-          })
-        }
-      },
-
-      onReset () {
-        name.value = null
-        password.value = null
-        accept.value = false
-      }
-
-    }
-  }
+ function login(){
+  api.post('api/auth/login',
+    {
+      email : authData.email,
+      password : authData.password,
+    })
+   .then(response => {
+     console.log(response)
+   })
 }
+
+
 </script>
 
 <style scoped>
