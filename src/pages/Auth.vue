@@ -102,7 +102,7 @@
               -->
 
               <div>
-                <q-btn label="Register" type="submit" color="primary"/>
+                <q-btn v-on:click="register" label="Register" type="submit" color="primary"/>
                 <!--
                                 <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
                 -->
@@ -140,6 +140,13 @@ const authData = reactive({
      console.log(response)
    })
 }
+
+ function register(){
+  api.post('api/auth/register',authData)
+   .then(response => {
+     console.log(response)
+   })
+},
 
 
 </script>
