@@ -15,7 +15,7 @@
           Quasar Starter Admin
         </q-toolbar-title>
 
-        <q-btn class="glossy" rounded color="teal" label="Profile" />
+        <q-btn v-on:click="logout" class="glossy" rounded color="teal" label="logout" />
       </q-toolbar>
     </q-header>
 
@@ -59,6 +59,7 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import {useRoute} from 'vue-router'
 import {computed} from 'vue'
+import { api } from 'boot/axios'
 
 const linksList = [
   {
@@ -98,6 +99,15 @@ export default defineComponent({
       path,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      logout(){
+        const token = localStorage.getItem("token")
+        api.post('api/auth/logout?token='+token)
+          .then(() => {
+            localStorage.setItem("role","")
+            localStorage.setItem("token","")
+            router.push('/')
+          })
       }
     }
   },

@@ -45,9 +45,6 @@
 
               <div>
                 <q-btn v-on:click="login" label="Login"  color="primary"/>
-<!--
-                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
--->
               </div>
             </q-form>
 
@@ -121,8 +118,10 @@
 <script setup>
 import {reactive, ref} from "vue";
 import { api } from 'boot/axios'
+import { useRouter } from 'vue-router'
 
 const tab = ref('signIn')
+const router = useRouter()
 const authData = reactive({
   name:'',
   email:'',
@@ -137,7 +136,8 @@ const authData = reactive({
       password : authData.password,
     })
    .then(response => {
-     console.log(response)
+     console.log(response.data)
+     //router.push('/')
    })
 }
 
@@ -146,7 +146,7 @@ const authData = reactive({
    .then(response => {
      console.log(response)
    })
-},
+}
 
 
 </script>
