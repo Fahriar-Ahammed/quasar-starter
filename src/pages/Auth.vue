@@ -10,8 +10,8 @@
           indicator-color="purple"
           align="justify"
         >
-          <q-tab name="signIn" label="Sign In" />
-          <q-tab name="signUp" label="Sign Up" />
+          <q-tab name="signIn" label="Sign In"/>
+          <q-tab name="signUp" label="Sign Up"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated class="bg-white">
@@ -26,7 +26,7 @@
                 hint="enter you email"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Please enter your email']"
-                />
+              />
 
               <q-input
                 filled
@@ -39,12 +39,12 @@
         ]"
               />
 
-<!--
-              <q-toggle v-model="accept" label="I accept the license and terms" />
--->
+              <!--
+                            <q-toggle v-model="accept" label="I accept the license and terms" />
+              -->
 
               <div>
-                <q-btn v-on:click="login" label="Login"  color="primary"/>
+                <q-btn v-on:click="login" label="Login" color="primary"/>
               </div>
             </q-form>
 
@@ -117,35 +117,36 @@
 
 <script setup>
 import {reactive, ref} from "vue";
-import { api } from 'boot/axios'
-import { useRouter } from 'vue-router'
+import {api} from 'boot/axios'
+import {useRouter} from 'vue-router'
 
 const tab = ref('signIn')
 const router = useRouter()
 const authData = reactive({
-  name:'',
-  email:'',
-  password:'',
-  password_confirmation:'',
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
 })
 
- function login(){
+function login() {
   api.post('api/auth/login',
     {
-      email : authData.email,
-      password : authData.password,
+      email: authData.email,
+      password: authData.password,
     })
-   .then(response => {
-     console.log(response.data)
-     //router.push('/')
-   })
+    .then(response => {
+      localStorage.setItem("role", response.data.user.role)
+      localStorage.setItem("token", response.data.access_token)
+      router.push('/')
+    })
 }
 
- function register(){
-  api.post('api/auth/register',authData)
-   .then(response => {
-     console.log(response)
-   })
+function register() {
+  api.post('api/auth/register', authData)
+    .then(response => {
+      console.log(response)
+    })
 }
 
 
