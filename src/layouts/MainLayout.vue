@@ -13,15 +13,15 @@
         />
 
         <q-toolbar-title>
-          Quasar Starter {{ loggedIn }}
+          Quasar Starter
         </q-toolbar-title>
         <div v-if="$q.platform.is.desktop">
           <q-btn flat color="white" label="Home" to="/"/>
           <q-btn flat color="white" label="Page1" to="page1"/>
           <q-btn flat color="white" label="Page2" to="page2"/>
         </div>
-        <q-btn v-if="loggedIn === null || loggedIn === ''"   class="glossy" rounded color="teal" label="Sign In" to="login"/>
-        <q-btn v-else  v-on:click="logout" class="glossy" rounded color="teal" label="logout" />
+        <q-btn v-if="!authStore.loggedIn" class="glossy" rounded color="teal" label="Sign In" to="login"/>
+        <q-btn v-else  v-on:click="authStore.logout" class="glossy" rounded color="teal" label="logout" />
 
       </q-toolbar>
     </q-header>
@@ -66,6 +66,7 @@
 import {computed, ref, watch} from 'vue'
 import {useRoute,useRouter} from 'vue-router'
 import { api } from 'boot/axios'
+import {useAuthStore} from "stores/auth";
 
 
 const menuList = [
@@ -90,33 +91,14 @@ const route = useRoute();
 const router = useRouter()
 const path = computed(() => route.path)
 
-let loggedIn = ref(localStorage.getItem("token"))
-console.log("##  "+loggedIn.value)
-watch(loggedIn,(val) => {
-  write(val)
-});
+const authStore = useAuthStore()
 
-function write(val){
-  console.log("write  "+val)
-}
-// console.log("role  "+test.value)
-
-
+console.log("pinia data  "+authStore.loggedIn)
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-function logout() {
-  const token = localStorage.getItem("token")
-  api.post('api/auth/logout?token=' + token)
-    .then(() => {
-      loggedIn.value = ""
-      localStorage.setItem("role", "")
-      localStorage.setItem("token", "")
-      router.push('/')
-    })
-}
 
 
 </script>

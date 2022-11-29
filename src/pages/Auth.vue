@@ -119,6 +119,7 @@
 import {reactive, ref} from "vue";
 import {api} from 'boot/axios'
 import {useRouter} from 'vue-router'
+import {useAuthStore} from "stores/auth";
 
 const tab = ref('signIn')
 const router = useRouter()
@@ -129,17 +130,11 @@ const authData = reactive({
   password_confirmation: '',
 })
 
+const authStore = useAuthStore()
+
 function login() {
-  api.post('api/auth/login',
-    {
-      email: authData.email,
-      password: authData.password,
-    })
-    .then(response => {
-      localStorage.setItem("role", response.data.user.role)
-      localStorage.setItem("token", response.data.access_token)
-      router.push('/')
-    })
+  authStore.login(authData.email, authData.password)
+  router.push('/')
 }
 
 function register() {
